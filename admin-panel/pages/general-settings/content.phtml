@@ -1,0 +1,541 @@
+<div class="container-fluid">
+    <div>
+        <h3>پیکربندی عمومی</h3>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="#">Home</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="#">Settings</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">General Configuration</li>
+            </ol>
+        </nav>
+    </div>
+    <?php $getStatus = getStatus(); if (!empty($getStatus) && !empty(checkIfThereIsError($getStatus))) {?><div class="alert alert-danger"><strong>مهم!</strong> برخی از خطاها در سیستم شما یافت شده است، لطفا بررسی کنید <a href="<?php echo Wo_LoadAdminLinkSettings('system_status'); ?>" data-ajax="?path=system_status">System Status</a>.</div><?php }?>
+    <!-- Vertical Layout -->
+    <?php if ($wo['config']['website_mode'] != 'facebook') { ?>
+        <div class="alert alert-warning">توجه: برخی از ویژگی ها به دلیل حالت وب سایتی که استفاده می کنید غیرفعال هستند.</div>
+    <?php } ?>
+    <div class="row">
+        <div class="col-lg-6 col-md-6 float-left">
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">پیکربندی عمومی</h6>
+                    <form class="general-settings" method="POST">
+                        <div class="float-left">
+                            <label for="developer_mode" class="main-label">حالت توسعه دهنده</label>
+                            <br><small class="admin-info">با فعال کردن حالت برنامه نویس گزارش خطا فعال می شود <br>توصیه نمی شود این حالت را بدون کمک توسعه دهنده فعال کنید،<br>این ممکن است برخی از مشکلات در وب سایت شما رخ دهد.</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="developer_mode" value="0" />
+                            <input type="checkbox" name="developer_mode" id="chck-developer_mode" value="1" <?php echo ($wo['config']['developer_mode'] == 1) ? 'checked': '';?>>
+                            <label for="chck-developer_mode" class="check-trail"><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                        <hr>
+                        <div class="float-left">
+                            <label for="maintenance_mode" class="main-label">حالت تعمیر و نگهداری</label>
+                            <br><small class="admin-info">کل سایت را تحت حالت تعمیر و نگهداری قرار دهید. <br> با مراجعه به سایت می توانید سایت را بازگردانید /admincp or /admin-cp</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="maintenance_mode" value="0" />
+                            <input type="checkbox" name="maintenance_mode" id="chck-maintenance_mode" value="1" <?php echo ($wo['config']['maintenance_mode'] == 1) ? 'checked': '';?>>
+                            <label for="chck-maintenance_mode" class="check-trail"><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                        <hr>
+                        <div class="float-left">
+                            <label for="useSeoFrindly" class="main-label">آدرس ها مناسب سئو</label>
+                            <br><small class="admin-info">برای صرفه جویی در پهنای باند، بارگیری صاف را فعال کنید.</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="useSeoFrindly" value="0" />
+                            <input type="checkbox" name="useSeoFrindly" id="chck-useSeoFrindly" value="1" <?php echo ($wo['config']['useSeoFrindly'] == 1) ? 'checked': '';?>>
+                            <label for="chck-useSeoFrindly" class="check-trail"><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                        <hr>
+                        <div class="float-left">
+                            <label for="developers_page" class="main-label">توسعه دهندگان (سیستم API)</label>
+                            <br><small class="admin-info">نمایش  /developers صفحه به همه کاربران برای درخواست های API.</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="developers_page" value="0" />
+                            <input type="checkbox" name="developers_page" id="chck-developers_page" value="1" <?php echo ($wo['config']['developers_page'] == 1) ? 'checked': '';?>>
+                            <label for="chck-developers_page" class="check-trail"><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                        <hr>
+                        <div class="float-left">
+                            <label for="profile_privacy" class="main-label">کاربران صفحه خوش آمدید</label>
+                            <br><small class="admin-info">به کاربرانی که وارد نشده‌اند اجازه دهید پروفایل‌های کاربر را در صفحه خوش‌آمدگویی مشاهده کنند.</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="profile_privacy" value="0" />
+                            <input type="checkbox" name="profile_privacy" id="chck-profile_privacy" value="1" <?php echo ($wo['config']['profile_privacy'] == 1) ? 'checked': '';?>>
+                            <label for="chck-profile_privacy" class="check-trail"><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                        <hr>
+                        <label for="defualtLang" class="main-label">زبان پیش فرض</label>
+                        <br><small class="admin-info">زبان پیش فرض سایت خود را تنظیم کنید.</small>
+                        <div class="form-group">
+                            <select class="form-control show-tick" id="defualtLang" name="defualtLang">
+                                <?php
+                                 foreach (Wo_LangsNamesFromDB() as $lang) {
+                                    
+                                   $languages = $lang;
+                                    
+                                   $languages_name = ucfirst(strtolower($languages));
+                                    
+                                   $selected_lang = ($languages == $wo['config']['defualtLang']) ? ' selected' : '';
+                                    
+                                 ?>
+                              <option value="<?php echo $languages;?>"<?php echo $selected_lang;?> ><?php echo $languages_name;?></option>
+                              <?php } ?>
+                            </select>
+                        </div>
+                        <hr>
+                        <label for="date_style" class="main-label">فرمت تاریخ</label>
+                        <br><small class="admin-info">قالب تاریخ پیش فرض سایت خود را تنظیم کنید.</small>
+                        <select class="form-control show-tick" id="date_style" name="date_style">
+                          <option value="m-d-y" <?php if($wo['config']['date_style'] == 'm-d-y'){echo 'selected';};?> >mm-dd-yy</option>
+                          <option value="d-m-y" <?php if($wo['config']['date_style'] == 'd-m-y'){echo 'selected';};?> >dd-mm-yy</option>
+                          <option value="y-m-d" <?php if($wo['config']['date_style'] == 'y-m-d'){echo 'selected';};?> >yy-mm-dd</option>
+                          <option value="M-d-y" <?php if($wo['config']['date_style'] == 'M-d-y'){echo 'selected';};?> >mmm-dd-yy</option>      
+                          <option value="d-F-y" <?php if($wo['config']['date_style'] == 'd-F-y'){echo 'selected';};?> >dd-mmmm-yy</option>
+                          <option value="Y-m-d" <?php if($wo['config']['date_style'] == 'Y-m-d'){echo 'selected';};?> >yyyy-mm-dd</option> 
+                          <option value="d-M-Y" <?php if($wo['config']['date_style'] == 'd-M-Y'){echo 'selected';};?> >dd-mmm-yyyy</option>
+                          <option value="d-F-Y" <?php if($wo['config']['date_style'] == 'd-F-Y'){echo 'selected';};?> >dd-mmmm-yyyy</option>
+                        </select>
+                        <br>
+                        <!-- <div class="general-settings-alert"></div> -->
+                        <input type="hidden" name="hash_id" value="<?php echo Wo_CreateSession();?>">
+                        <!-- <button type="submit" class="btn btn-primary m-t-15 waves-effect">Save</button> -->
+                    </form>
+                </div>
+            </div>
+              <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">پیکربندی کاربر</h6>
+                    <form class="user2-settings" method="POST">
+                        <div class="float-left">
+                            <label for="online_sidebar" class="main-label">کاربران آنلاین</label>
+                        <br><small class="admin-info">نمایش کاربران فعال فعلی در صفحه اصلی</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="online_sidebar" value="0" />
+                            <input type="checkbox" name="online_sidebar" id="chck-online_sidebar" value="1" <?php echo ($wo['config']['online_sidebar'] == 1) ? 'checked': '';?>>
+                            <label for="chck-online_sidebar" class="check-trail"><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                        <hr>
+                        <div class="float-left">
+                            <label for="user_lastseen" class="main-label">آخرین وضعیت مشاهده کاربر</label>
+                           <br><small class="admin-info">به کاربران اجازه دهید وضعیت، آنلاین و آخرین فعالیت خود را تنظیم کنند.</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="user_lastseen" value="0" />
+                            <input type="checkbox" name="user_lastseen" id="chck-user_lastseen" value="1" <?php echo ($wo['config']['user_lastseen'] == 1) ? 'checked': '';?>>
+                            <label for="chck-user_lastseen" class="check-trail"><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                        <hr>
+                        <div class="float-left">
+                            <label for="deleteAccount" class="main-label">حذف حساب کاربری</label>
+                            <br><small class="admin-info">به کاربران اجازه دهید حساب های خود را حذف کنند.</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="deleteAccount" value="0" />
+                            <input type="checkbox" name="deleteAccount" id="chck-deleteAccount" value="1" <?php echo ($wo['config']['deleteAccount'] == 1) ? 'checked': '';?>>
+                            <label for="chck-deleteAccount" class="check-trail"><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                        <hr>
+                        <div class="float-left">
+                            <label for="profile_back" class="main-label">تغییر پس زمینه پروفایل </label>
+                            <select class="form-control show-tick" id="profile_background_request" name="profile_background_request" onchange="SelectProModel('can_use_background',this)">
+                              <option value="admin" <?php echo ($wo['config']['profile_background_request'] == 'admin')   ? ' selected' : '';?> ><svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user"> <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path> <circle cx="12" cy="7" r="4"></circle> </svg>مدیر</option>
+                              <option value="all" <?php echo ($wo['config']['profile_background_request'] == 'all')   ? ' selected' : '';?> ><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-globe"> <circle cx="12" cy="12" r="10"></circle> <line x1="2" y1="12" x2="22" y2="12"></line> <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path> </svg> همه کاربران</option>
+                              <option value="verified" <?php echo ($wo['config']['profile_background_request'] == 'verified')   ? ' selected' : '';?> ><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" class="verified-color feather feather-check-circle" title="" data-toggle="tooltip" data-original-title="Verified User"><path d="M23,12L20.56,9.22L20.9,5.54L17.29,4.72L15.4,1.54L12,3L8.6,1.54L6.71,4.72L3.1,5.53L3.44,9.21L1,12L3.44,14.78L3.1,18.47L6.71,19.29L8.6,22.47L12,21L15.4,22.46L17.29,19.28L20.9,18.46L20.56,14.78L23,12M10,17L6,13L7.41,11.59L10,14.17L16.59,7.58L18,9L10,17Z"></path></svg>فقط کاربران تایید شده</option>
+                              <option value="pro" <?php echo ($wo['config']['profile_background_request'] == 'pro')   ? ' selected' : '';?> ><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M7,2V13H10V22L17,10H13L17,2H7Z"></path></svg>فقط کاربران حرفه ای</option>
+                            </select>
+                            <br><small class="admin-info">به کاربران اجازه دهید با آپلود یک تصویر، پس زمینه پروفایل خود را تغییر دهند</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="profile_back" value="0" />
+                            <input type="checkbox" name="profile_back" id="chck-profile_back" value="1" <?php echo ($wo['config']['profile_back'] == 1) ? 'checked': '';?>>
+                            <label for="chck-profile_back" class="check-trail"><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                        <hr>
+                         <div class="float-left">
+                            <label for="connectivitySystem" class="main-label">سیستم دوستان</label>
+                        <br><small class="admin-info">بین سیستم Follow & Friend انتخاب کنید. <br> <span style="color: #c48a36">اگر سیستم را به سیستم دیگری تغییر دهید، تمام فالوورها، فالوورها، دوستان موجود حذف خواهند شد</span></small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="connectivitySystem" value="0" />
+                            <input type="checkbox" name="connectivitySystem" id="chck-connectivitySystem" value="1" <?php echo ($wo['config']['connectivitySystem'] == 1) ? 'checked': '';?>>
+                            <label for="chck-connectivitySystem" class="check-trail"><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="form-group">
+                            <div class="form-line">
+                                <label class="form-label" class="main-label">محدودیت سیستم اتصال</label>
+                                <input type="text" name="connectivitySystemLimit" class="form-control" value="<?php echo $wo['config']['connectivitySystemLimit']?>"><small class="admin-info">هر کاربر چند دوست می تواند داشته باشد؟</small>
+                            </div>
+                        </div>
+                        <hr>
+                        
+                         <div class="float-left">
+                            <label for="invite_links_system" class="main-label">سیستم دعوت کاربر</label>
+                            <br><small class="admin-info">به کاربران اجازه دهید تا کاربران دیگر را به سایت شما دعوت کنند.</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="invite_links_system" value="0" />
+                            <input type="checkbox" name="invite_links_system" id="chck-invite_links_system" value="1" <?php echo ($wo['config']['invite_links_system'] == 1) ? 'checked': '';?>>
+                            <label for="chck-invite_links_system" class="check-trail"><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="form-group form-float">
+                            <label class="form-label" class="main-label">یک کاربر می تواند چند لینک ایجاد کند؟</label>
+                            <div class="form-line">
+                                <input type="text" id="user_links_limit" name="user_links_limit" class="form-control" value="<?php echo $wo['config']['user_links_limit']?>">
+                            </div>
+                        </div>
+                        <div class="form-group form-float">
+                            <label class="form-label" class="main-label">کاربر می تواند لینک های X را در داخل ایجاد کند؟</label>
+                            <div class="form-line">
+                                <select class="form-control show-tick" id="expire_user_links" name="expire_user_links">
+                                      <option value="hour" <?php echo ($wo['config']['expire_user_links'] == 'hour')   ? ' selected': '';?>>1 ساعت</option>
+                                      <option value="day" <?php echo ($wo['config']['expire_user_links'] == 'day')   ? ' selected': '';?>>1 روز</option>
+                                      <option value="week" <?php echo ($wo['config']['expire_user_links'] == 'week')   ? ' selected': '';?>>1 هفته</option>
+                                      <option value="month" <?php echo ($wo['config']['expire_user_links'] == 'month')   ? ' selected': '';?>>1 ماه</option>
+                                      <option value="year" <?php echo ($wo['config']['expire_user_links'] == 'year')   ? ' selected': '';?>>1 سال</option>
+                                </select>
+                            </div>
+                        </div>
+                        <!-- <div class="user2-settings-alert"></div> -->
+                        <input type="hidden" name="hash_id" value="<?php echo Wo_CreateSession();?>">
+                        <!-- <button type="submit" class="btn btn-primary m-t-15 waves-effect">Save</button> -->
+                    </form>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">تنظیمات دیگر</h6>
+                    <div class="other-settings-alert"></div>
+                    <form class="other-settings" method="POST">
+                        <div class="form-group form-float">
+                            <label class="form-label">کلمات سانسور شده</label>
+                            <div class="form-line">
+                                <input type="text" id="censored_words" name="censored_words" class="form-control" value="<?php echo $wo['config']['censored_words']?>">
+                                <small class="admin-info">کلماتی که باید سانسور و جایگزین شوند *** در پیام‌ها، پست‌ها، نظرات و غیره که با کاما از هم جدا شده‌اند.</small>
+                            </div>
+                        </div>
+                        <label for="cache_sidebar" >ذخیره سازی صفحه اصلی</label>
+                        <select class="form-control show-tick" id="cache_sidebar" name="cache_sidebar">
+                          <option value="1" <?php echo ($wo['config']['cache_sidebar'] == 1)   ? ' selected' : '';?> >داده‌های نوار کناری صفحه اصلی را هر ۲ دقیقه به‌روزرسانی کنید (بارگذاری سریع‌تر)</option>
+                          <option value="0" <?php echo ($wo['config']['cache_sidebar'] == 0)   ? ' selected' : '';?> >هرگز حافظه پنهان، همیشه داده های جدید واکشی کنید</option>
+                        </select>
+                        <small class="admin-info">برای صرفه جویی در مصرف MySQL و افزایش سرعت صفحه اصلی، این ویژگی را فعال کنید. </small>
+                        <div class="clearfix"></div>
+                        <label for="update_user_profile" >ذخیره صفحه نمایه</label>
+                        <div class="form-group">
+                            <select class="form-control show-tick" id="update_user_profile" name="update_user_profile">
+                              <option value="30" <?php echo ($wo['config']['update_user_profile'] == 30)   ? ' selected' : '';?> >هر 30 ثانیه</option>
+                              <option value="120" <?php echo ($wo['config']['update_user_profile'] == 120)   ? ' selected' : '';?> >هر 2 دقیقه</option>
+                              <option value="3600" <?php echo ($wo['config']['update_user_profile'] == 3600)   ? ' selected' : '';?> >هر 1 ساعت</option>
+                              <option value="7200" <?php echo ($wo['config']['update_user_profile'] == 7200)   ? ' selected' : '';?> >هر 2 ساعت</option>
+                              <option value="43200" <?php echo ($wo['config']['update_user_profile'] == 43200)   ? ' selected' : '';?> >هر 12 ساعت</option>
+                              <option value="86400" <?php echo ($wo['config']['update_user_profile'] == 86400)   ? ' selected' : '';?> >هر 24 ساعت</option>
+                            </select>
+                            <small class="admin-info margin-top-5">داده های نوار کناری را هر X به روز کنید، این مربوط به سیستم کش برای صرفه جویی در استفاده از MySQL است.</small>
+                        </div>
+                        <hr>
+                        <input type="hidden" name="hash_id" value="<?php echo Wo_CreateSession();?>">
+                    </form>
+                </div>
+            </div>
+            
+        </div>
+        <div class="col-lg-6 col-md-6 float-right">
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">ورود و ثبت نام</h6>
+                    <form class="user-settings" method="POST">
+                        <div class="float-left">
+                            <label for="user_registration" class="main-label">ورود و ثبت نام</label>
+                            <br><small class="admin-info">به کاربران اجازه دهید در سایت شما حساب ایجاد کنند.</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="user_registration" value="0" />
+                            <input type="checkbox" name="user_registration" id="chck-user_registration" value="1" <?php echo ($wo['config']['user_registration'] == 1) ? 'checked': '';?>>
+                            <label for="chck-user_registration" class="check-trail"><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                        <hr>
+                        <div class="float-left">
+                            <label for="auto_username" class="main-label">نام کاربری خودکار در ثبت نام</label>
+                            <br><small class="admin-info">هنگام ثبت نام یک نام کاربری خودکار ایجاد کنید. <br> فرم ثبت نام .نام و نام خانوادگی کاربر را می خواهد.</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="auto_username" value="0" />
+                            <input type="checkbox" name="auto_username" id="chck-auto_username" value="1" <?php echo ($wo['config']['auto_username'] == 1) ? 'checked': '';?>>
+                            <label for="chck-auto_username" class="check-trail"><span class="check-handler"></span></label>
+                        </div> 
+                        <div class="clearfix"></div>
+                        <hr>
+                        <div class="float-left">
+                            <label for="password_complexity_system" class="main-label">سیستم پیچیدگی رمز عبور</label>
+                            <br><small class="admin-info">سیستم هنگام ثبت نام به رمز عبور قدرتمند نیاز دارد، <br>از جمله حروف، اعداد و کاراکترهای خاص.</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="password_complexity_system" value="0" />
+                            <input type="checkbox" name="password_complexity_system" id="chck-password_complexity_system" value="1" <?php echo ($wo['config']['password_complexity_system'] == 1) ? 'checked': '';?>>
+                            <label for="chck-password_complexity_system" class="check-trail"><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                        <hr>
+                        <div class="float-left">
+                            <label for="login_auth" class="main-label">ورود غیر معمول</label>
+                            <br><small class="admin-info">هنگامی که کاربر از یک مکان جدید وارد می شود، یک پیوند تأیید ارسال کنید.</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="login_auth" value="0" />
+                            <input type="checkbox" name="login_auth" id="chck-login_auth" value="1" <?php echo ($wo['config']['login_auth'] == 1) ? 'checked': '';?>>
+                            <label for="chck-login_auth" class="check-trail"><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                        <hr>
+                        <div class="float-left">
+                            <label for="remember_device" class="main-label">این دستگاه را به خاطر بسپارید</label>
+                            <br><small class="admin-info">این دستگاه را در صفحه خوش آمد گویی به خاطر بسپارید.</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="remember_device" value="0" />
+                            <input type="checkbox" name="remember_device" id="chck-remember_device" value="1" <?php echo ($wo['config']['remember_device'] == 1) ? 'checked': '';?>>
+                            <label for="chck-remember_device" class="check-trail"><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                        <hr>
+                        <div class="float-left">
+                            <label for="login_auth" class="main-label">احراز هویت دو مرحله ای</label>
+                            <br><small class="admin-info">هنگام ورود کاربر کد تایید را به ایمیل یا پیامک ارسال کنید.</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="two_factor" value="0" />
+                            <input type="checkbox" name="two_factor" id="chck-two_factor" value="1" <?php echo ($wo['config']['two_factor'] == 1) ? 'checked': '';?>>
+                            <label for="chck-two_factor" class="check-trail"><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                        <label for="defualtLang">روش احراز هویت دو مرحله ای</label>
+                        <br><small class="admin-info">سیستمی را که 2FA باید استفاده کند انتخاب کنید.</small>
+                        <div class="form-group">
+                            <select class="form-control show-tick" id="two_factor_type" name="two_factor_type">
+                              <option value="email" <?php echo ($wo['config']['two_factor_type'] == 'email') ? 'selected': '';?>>آدرس ایمیل</option>
+                              <option value="phone" <?php echo ($wo['config']['two_factor_type'] == 'phone') ? 'selected': '';?>>پیامک / شماره تلفن</option>
+                              <option value="both" <?php echo ($wo['config']['two_factor_type'] == 'both') ? 'selected': '';?>>هر دو با هم</option>
+                            </select>
+                        </div>
+                        <hr>
+                        <div class="float-left">
+                            <label for="emailValidation" class="main-label">تاییدیه حساب</label>
+                            <br><small class="admin-info">پس از ثبت نام لینک فعال سازی را ارسال کنید.</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="emailValidation" value="0" />
+                            <input type="checkbox" name="emailValidation" id="chck-emailValidation" value="1" <?php echo ($wo['config']['emailValidation'] == 1) ? 'checked': '';?>>
+                            <label for="chck-emailValidation" class="check-trail"><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                        <label for="defualtLang" >روش اعتبارسنجی حساب</label>
+                        <br><small class="admin-info">در صورت انتخاب پیامک، نوع اعتبارسنجی را از طریق پیامک یا ایمیل انتخاب کنید. <br> مطمئن شوید که پیامک را پیکربندی کرده اید.</small>
+                        <div class="form-group">
+                            <select class="form-control show-tick" id="sms_or_email" name="sms_or_email">
+                                <option value="mail" <?php echo ($wo['config']['sms_or_email'] == 'mail') ? 'selected': '';?>>آدرس ایمیل</option>
+                                <option value="sms" <?php echo ($wo['config']['sms_or_email'] == 'sms') ? 'selected': '';?>>پیامک / شماره تلفن</option>
+                            </select>
+                        </div>
+                        <hr>
+                        <div class="float-left">
+                            <label for="reCaptcha" class="main-label">ریکپچا</label>
+                            <br><small class="admin-info">برای جلوگیری از هرزنامه، ریکپچا را فعال کنید.</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="reCaptcha" value="0" />
+                            <input type="checkbox" name="reCaptcha" id="chck-reCaptcha" value="1" <?php echo ($wo['config']['reCaptcha'] == 1) ? 'checked': '';?>>
+                            <label for="chck-reCaptcha" class="check-trail"><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <label class="form-label">کلید ریکپچا</label>
+                                <input type="text" id="reCaptchaKey" name="reCaptchaKey" class="form-control" value="<?php echo $wo['config']['reCaptchaKey']?>">
+                            </div>
+                        </div>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <label class="form-label">کلید مخفی ریکپچا</label>
+                                <input type="text" id="recaptcha_secret_key" name="recaptcha_secret_key" class="form-control" value="<?php echo $wo['config']['recaptcha_secret_key']?>">
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="float-left">
+                            <label for="reCaptcha" class="main-label">جلوگیری از تلاش های بد ورود</label>
+                            <br><small class="admin-info">این ویژگی را برای ردیابی و توقف حملات brute-force فعال کنید.</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="prevent_system" value="0" />
+                            <input type="checkbox" name="prevent_system" id="chck-prevent_system" value="1" <?php echo ($wo['config']['prevent_system'] == 1) ? 'checked': '';?>>
+                            <label for="chck-prevent_system" class="check-trail"><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <label class="form-label">محدودیت ورود</label>
+                                <input type="text" id="bad_login_limit" name="bad_login_limit" class="form-control" value="<?php echo $wo['config']['bad_login_limit']?>">
+                                <small class="admin-info">چند بار یک کاربر می تواند قبل از قفل شدن سعی کند وارد سیستم شود؟</small>
+                            </div>
+                        </div>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <label class="form-label">زمان قفل شدن (در چند دقیقه)</label>
+                                <input type="text" id="lock_time" name="lock_time" class="form-control" value="<?php echo $wo['config']['lock_time']?>">
+                                <small class="admin-info">کاربر برای چه مدت باید قفل شود؟</small>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="form-group form-float">
+                            <label for="user_limit" class="main-label">محدودیت ثبت نامs</label>
+                            <small class="admin-info">چند بار یک کاربر می تواند در هر ساعت حساب ایجاد کند.</small>
+                            <div class="form-line">
+                                <input type="text" id="user_limit" name="user_limit" class="form-control" value="<?php echo $wo['config']['user_limit']?>">
+                                
+                            </div>
+                        </div>
+
+                        <!-- <div class="user-settings-alert"></div> -->
+                        <input type="hidden" name="hash_id" value="<?php echo Wo_CreateSession();?>">
+                        <!-- <button type="submit" class="btn btn-primary m-t-15 waves-effect">Save</button> -->
+                    </form>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">تنظیمات اعلان ها</h6>
+                    <form class="notifications-settings" method="POST">
+                        <div class="float-left">
+                            <label for="emailNotification" class="main-label">اعلان های ایمیل </label>
+                            <br><small class="admin-info">پس از دریافت اعلان های سایت، اعلان های ایمیل را برای کاربران ارسال کنید.</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="emailNotification" value="0" />
+                            <input type="checkbox" name="emailNotification" id="chck-emailNotification" value="1" <?php echo ($wo['config']['emailNotification'] == 1) ? 'checked': '';?>>
+                            <label for="chck-emailNotification" class="check-trail"><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                        <hr>
+                        <div class="float-left">
+                            <label for="profileVisit" class="main-label">اعلان های بازدید از نمایه </label>
+                            <br><small class="admin-info">هنگامی که شخصی از نمایه وی بازدید می کند، یک اعلان برای کاربر ارسال کنید. <br>توجه داشته باشید که اگر سیستم Pro را فعال کنید، این ویژگی از کاربر می‌خواهد که عضو Pro شود.</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="profileVisit" value="0" />
+                            <input type="checkbox" name="profileVisit" id="chck-profileVisit" value="1" <?php echo ($wo['config']['profileVisit'] == 1) ? 'checked': '';?>>
+                            <label for="chck-profileVisit" class="check-trail"><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                        <hr>
+                        <div class="float-left">
+                            <label for="notify_new_post" class="main-label">اطلاع رسانی در پست جدید</label>
+                            <br><small class="admin-info">هنگامی که کاربر یک پست جدید ایجاد می کند، یک اعلان برای دنبال کنندگان ارسال کنید.</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="notify_new_post" value="0" />
+                            <input type="checkbox" name="notify_new_post" id="chck-notify_new_post" value="1" <?php echo ($wo['config']['notify_new_post'] == 1) ? 'checked': '';?>>
+                            <label for="chck-notify_new_post" class="check-trail"><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+
+                        <!--  <div class="notifications-settings-alert"></div> -->
+                        <input type="hidden" name="hash_id" value="<?php echo Wo_CreateSession();?>"><!-- 
+                        <button type="submit" class="btn btn-primary m-t-15 waves-effect">Save</button> -->
+                    </form>
+                </div>
+            </div>
+            
+            
+        </div> 
+        <div class="clearfix"></div>
+    </div>
+    <!-- #END# Vertical Layout -->
+<script>
+
+$(function() {
+    $('.switcher input[type=checkbox]').click(function () {
+        setToTrue = 0;
+        if ($(this).is(":checked") === true) {
+            setToTrue = 1;
+        }
+        var configName = $(this).attr('name');
+        var hash_id = $('input[name=hash_id]').val();
+        var objData = {};
+        objData[configName] = setToTrue;
+        objData['hash_id'] = hash_id;
+        $.post( Wo_Ajax_Requests_File() + '?f=admin_setting&s=update_general_setting', objData);
+    });
+
+    var setTimeOutColor = setTimeout(function (){});
+    $('select').on('change', function() {
+         clearTimeout(setTimeOutColor);
+        var thisElement = $(this);
+        var configName = thisElement.attr('name');
+        var hash_id = $('input[name=hash_id]').val();
+        var objData = {};
+        objData[configName] = this.value;
+        objData['hash_id'] = hash_id;
+        thisElement.addClass('warning');
+        $.post( Wo_Ajax_Requests_File() + '?f=admin_setting&s=update_general_setting', objData, function (data) {
+            if (data.status == 200) {
+                thisElement.removeClass('warning');
+                thisElement.addClass('success');
+            } else {
+                thisElement.addClass('error');
+            }
+            var setTimeOutColor = setTimeout(function () {
+                thisElement.removeClass('success');
+                thisElement.removeClass('warning');
+                thisElement.removeClass('error');
+            }, 2000);
+        });
+    });
+    $('input[type=text], input[type=number]').on('input', delay(function() {
+            clearTimeout(setTimeOutColor);
+            var thisElement = $(this);
+            var configName = thisElement.attr('name');
+            var hash_id = $('input[name=hash_id]').val();
+            var objData = {};
+            objData[configName] = this.value;
+            objData['hash_id'] = hash_id;
+            thisElement.addClass('warning');
+            $.post( Wo_Ajax_Requests_File() + '?f=admin_setting&s=update_general_setting', objData, function (data) {
+                if (data.status == 200) {
+                    thisElement.removeClass('warning');
+                    thisElement.addClass('success');
+                } else {
+                    thisElement.addClass('error');
+                }
+                var setTimeOutColor = setTimeout(function () {
+                    thisElement.removeClass('success');
+                    thisElement.removeClass('warning');
+                    thisElement.removeClass('error');
+                }, 2000);
+                //thisElement.focus();
+            });
+    }, 500));
+});
+
+</script>
