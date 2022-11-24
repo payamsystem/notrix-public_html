@@ -1,0 +1,2 @@
+[09-Nov-2022 16:18:43 UTC] PHP Warning:  Undefined array key "follow" in /home/modir/public_html/themes/wowonder/layout/modals/unfriend.phtml on line 13
+[09-Nov-2022 16:18:43 UTC] PHP Warning:  Trying to access array offset on value of type null in /home/modir/public_html/themes/wowonder/layout/modals/unfriend.phtml on line 13
